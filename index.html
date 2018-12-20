@@ -60,7 +60,7 @@
       const name = input.value
       input.value = ''
 
-      store.dispatch(addTodoAction({
+      checkAndDispatch(store, addTodoAction({
         name,
         completed: false,
         id: generateId()
@@ -72,7 +72,7 @@
       const name = input.value
       input.value = ''
 
-      store.dispatch(addGoalAction({
+      checkAndDispatch(addGoalAction({
         name,
         id: generateId()
       }))
@@ -88,7 +88,7 @@
       const node = document.createElement('li')
       const text = document.createTextNode(todo.name)
       const removeBtn = createRemoveButton(() =>
-        store.dispatch(removeTodoAction(todo.id))
+        checkAndDispatch(store, removeTodoAction(todo.id))
       )
 
       node.appendChild(text)
@@ -99,7 +99,7 @@
         : 'none'
 
       node.addEventListener('click', e => {
-        store.dispatch(toggleTodoAction(todo.id))
+        checkAndDispatch(store, toggleTodoAction(todo.id))
       })
 
       document.getElementById('todos')
@@ -110,7 +110,7 @@
       const node = document.createElement('li')
       const text = document.createTextNode(goal.name)
       const removeBtn = createRemoveButton(() =>
-        store.dispatch(removeGoalAction(goal.id))
+        checkAndDispatch(store, removeGoalAction(goal.id))
       )
 
       node.appendChild(text)

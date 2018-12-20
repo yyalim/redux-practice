@@ -57,37 +57,24 @@ const goals = (state = [], action) => {
   }
 }
 
-// const app = (state = {}, action) => ({
-//   todos: todos(state.todos, action),
-//   goals: goals(state.goals, action)
-// })
+const checkAndDispatch = (store, action) => {
+  if(
+    action.type === ADD_TODO &&
+    action.todo.name.toLowerCase().include('bitcon')
+  ) {
+    return alert('Nope. Thats not a good idea')
+  }
+
+  if(
+    action.type === ADD_GOAL &&
+    action.goal.name.toLowerCase().include('bitcon')
+  ) {
+    return alert('Nope. Thats not a good idea')
+  }
+
+  return store.dispatch(action)
+}
 
 const app = Redux.combineReducers({ todos, goals })
-
-// const createStore = (reducer) => {
-//   let state
-//   const listeners = []
-
-//   const getState = () => state
-
-//   const subscribe = listener => {
-//     listeners.push(listener)
-
-//     return () => {
-//       listeners = listeners.filter(l => l !== listener)
-//     }
-//   }
-
-//   const dispatch = (action) => {
-//     state = reducer(state, action)
-//     listeners.forEach(listener => { listener() })
-//   }
-
-//   return {
-//     getState,
-//     subscribe,
-//     dispatch
-//   }
-// }
 
 const store = Redux.createStore(app);
