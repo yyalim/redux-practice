@@ -57,35 +57,37 @@ const goals = (state = [], action) => {
   }
 }
 
-const app = (state = {}, action) => ({
-  todos: todos(state.todos, action),
-  goals: goals(state.goals, action)
-})
+// const app = (state = {}, action) => ({
+//   todos: todos(state.todos, action),
+//   goals: goals(state.goals, action)
+// })
 
-const createStore = (reducer) => {
-  let state
-  const listeners = []
+const app = Redux.combineReducers({ todos, goals })
 
-  const getState = () => state
+// const createStore = (reducer) => {
+//   let state
+//   const listeners = []
 
-  const subscribe = listener => {
-    listeners.push(listener)
+//   const getState = () => state
 
-    return () => {
-      listeners = listeners.filter(l => l !== listener)
-    }
-  }
+//   const subscribe = listener => {
+//     listeners.push(listener)
 
-  const dispatch = (action) => {
-    state = reducer(state, action)
-    listeners.forEach(listener => { listener() })
-  }
+//     return () => {
+//       listeners = listeners.filter(l => l !== listener)
+//     }
+//   }
 
-  return {
-    getState,
-    subscribe,
-    dispatch
-  }
-}
+//   const dispatch = (action) => {
+//     state = reducer(state, action)
+//     listeners.forEach(listener => { listener() })
+//   }
 
-const store = createStore(app);
+//   return {
+//     getState,
+//     subscribe,
+//     dispatch
+//   }
+// }
+
+const store = Redux.createStore(app);
