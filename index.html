@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div class="todos">
+    <h2>Todo List</h2>
+    <input type="text" id="todo" placeholder="Add Todo" >
+    <button id="todoBtn">Add Todo</button>
+    <ul id="todos">
+
+    </ul>
+  </div>
+
+  <div class="goals">
+    <h2>Goals</h2>
+    <input type="text" id="goal" placeholder="Add Goal" >
+    <button id="goalBtn">Add Goal</button>
+    <ul id="goals">
+
+    </ul>
+  </div>
+
+  <script type="text/javascript" src="redux.js"></script>
+  <script>
+    store.subscribe(() => {
+      const { goals, todos } = store.getState()
+
+      document.getElementById('todos').innerHTML = ''
+      document.getElementById('goals').innerHTML = ''
+
+      todos.forEach(addTodoDOM)
+      goals.forEach(addGoalDOM)
+    })
+
+    function generateId() {
+      return Math
+        .random()
+        .toString(36)
+        .substring(2) + (new Date())
+          .getTime()
+          .toString(36)
+    }
+
+    function createRemoveButton (onClick) {
+      const removeBtn = document.createElement('button')
+      removeBtn.innerHTML = 'X'
+      removeBtn.addEventListener('click', onClick)
+      return removeBtn
+    }
+
+    function addTodo() {
+      const input = document.getElementById('todo')
+      const name = input.value
+      input.value = ''
+
+      store.dispatch(addTodoAction({
+        name,
+        completed: false,
+        id: generateId()
+      }))
+    }
+
+    function addGoal() {
+      const input = document.getElementById('goal')
+      const name = input.value
+      input.value = ''
+
+      store.dispatch(addGoalAction({
+        name,
+        id: generateId()
+      }))
+    }
+
+    document.getElementById('todoBtn')
+      .addEventListener('click', addTodo)
+
+    document.getElementById('goalBtn')
+      .addEventListener('click', addGoal)
+
+    function addTodoDOM(todo) {
+      const node = document.createElement('li')
+      const text = document.createTextNode(todo.name)
+      const removeBtn = createRemoveButton(() =>
+        store.dispatch(removeTodoAction(todo.id))
+      )
+
+      node.appendChild(text)
+      node.appendChild(removeBtn)
+
+      node.style.textDecoration = todo.complete
+        ? 'line-through'
+        : 'none'
+
+      node.addEventListener('click', e => {
+        store.dispatch(toggleTodoAction(todo.id))
+      })
+
+      document.getElementById('todos')
+        .appendChild(node)
+    }
+
+    function addGoalDOM(goal) {
+      const node = document.createElement('li')
+      const text = document.createTextNode(goal.name)
+      const removeBtn = createRemoveButton(() =>
+        store.dispatch(removeGoalAction(goal.id))
+      )
+
+      node.appendChild(text)
+      node.appendChild(removeBtn)
+
+      document.getElementById('goals')
+        .appendChild(node)
+    }
+  </script>
+</body>
+</html>
